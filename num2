@@ -1,0 +1,75 @@
+#include <GL/freeglut.h>
+float rtri = 0.0f, scale = 1.0f;  // 피라미드 회전 속도 변수 초기화
+float a = 0.0001f; // 큐브 회전 속도 변수 초기화
+
+
+void DrawGLScene() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glTranslatef(-1.5f, 0.0f, -6.0f);			// 위치 이동
+
+	glRotatef(rtri, 0.0f, 1.0f, 0.0f);			// 회전
+
+	glScalef(scale, scale, scale);				//크기 조절
+
+	glBegin(GL_TRIANGLES);                  // Start Drawing The Pyramid
+	glColor3f(1.0f, 0.0f, 0.0f);          // Red
+	glVertex3f(0.0f, 1.0f, 0.0f);          // Top Of Triangle (Front)
+	glColor3f(0.0f, 1.0f, 0.0f);          // Green
+	glVertex3f(-1.0f, -1.0f, 1.0f);          // Left Of Triangle (Front)
+	glColor3f(0.0f, 0.0f, 1.0f);          // Blue
+	glVertex3f(1.0f, -1.0f, 1.0f);          // Right Of Triangle (Front)
+
+	glColor3f(1.0f, 0.0f, 0.0f);          // Red
+	glVertex3f(0.0f, 1.0f, 0.0f);          // Top Of Triangle (Right)
+	glColor3f(0.0f, 0.0f, 1.0f);          // Blue
+	glVertex3f(1.0f, -1.0f, 1.0f);          // Left Of Triangle (Right)
+	glColor3f(0.0f, 1.0f, 0.0f);          // Green
+	glVertex3f(1.0f, -1.0f, -1.0f);         // Right Of Triangle (Right)
+
+	glColor3f(1.0f, 0.0f, 0.0f);          // Red
+	glVertex3f(0.0f, 1.0f, 0.0f);          // Top Of Triangle (Back)
+	glColor3f(0.0f, 1.0f, 0.0f);          // Green
+	glVertex3f(1.0f, -1.0f, -1.0f);         // Left Of Triangle (Back)
+	glColor3f(0.0f, 0.0f, 1.0f);          // Blue
+	glVertex3f(-1.0f, -1.0f, -1.0f);         // Right Of Triangle (Back)
+
+	glColor3f(1.0f, 0.0f, 0.0f);          // Red
+	glVertex3f(0.0f, 1.0f, 0.0f);          // Top Of Triangle (Left)
+	glColor3f(0.0f, 0.0f, 1.0f);          // Blue
+	glVertex3f(-1.0f, -1.0f, -1.0f);          // Left Of Triangle (Left)
+	glColor3f(0.0f, 1.0f, 0.0f);          // Green
+	glVertex3f(-1.0f, -1.0f, 1.0f);          // Right Of Triangle (Left)
+	glEnd();
+
+	rtri += 0.1f;                     
+	scale += a;
+
+	if (scale >= 1.5f || scale <= 0.5f) {
+		a = -a;
+	}
+
+	glutSwapBuffers();
+	glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);;
+	glutInitWindowSize(400, 320);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("OpenGL Sample Drawing");
+
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45.0, 640.0 / 480.0, 1.0, 100.0);
+	
+	glutDisplayFunc(DrawGLScene);
+	glutMainLoop();
+	return 0;
+}
